@@ -36,7 +36,7 @@ final class CombinationAlgorithmTest extends TestCase
 
 
     /**
-     * @dataProvider testRandomProvider
+     * @dataProvider randomProvider
      */
     public function testRandomMultiple(
         string $algorithmName,
@@ -48,7 +48,7 @@ final class CombinationAlgorithmTest extends TestCase
         $this->assertCount($maxResults, $result);
     }
 
-    public function testRandomProvider() {
+    public function randomProvider() {
         return [
             [
                 self::FORCE_COMBINATION_ALGORITHM_NAME,

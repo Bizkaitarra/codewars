@@ -7,16 +7,11 @@ final class CombinationAlgorithms
         foreach ($inbounds as $inbound) {
             foreach ($outbounds as $outbound) {
                 $combination = new Combination($inbound, $outbound);
-                $combinations[$combination->price()][] = $combination;
+                $combinations[] = $combination;
             }
         }
-        ksort($combinations);
-        $finalCombinations = [];
-        foreach ($combinations as $combinationsInPrice) {
-            foreach ($combinationsInPrice as $combination) {
-                $finalCombinations[] = $combination;
-            }
-        }
-        return array_splice($finalCombinations, 0, $maxResults);
+        usort($combinations, fn($a, $b) => $a->price() - $b->price());
+
+        return array_slice($combinations, 0, $maxResults);
     }
 }
