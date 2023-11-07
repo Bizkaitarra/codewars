@@ -32,4 +32,30 @@ final class CombinationAlgorithmTest extends TestCase
         $this->assertEquals($result[3]->price(), 4);
     }
 
+
+    public function testRandomMultiple() {
+        $result = CombinationAlgorithms::forceCombination(
+            $this->generateRandomTransports(500),
+            $this->generateRandomTransports(500),
+            2000
+        );
+        $this->assertCount(2000, $result);
+    }
+
+    private function generateRandomTransports(int $num): array {
+        $transports = [];
+        for ($i = 0; $i < $num; $i++) {
+            if (count($transports) == 0) {
+                $transports[] = $this->generateRandomTransport(1);
+                continue;
+            }
+            $transports[] = $this->generateRandomTransport($transports[count($transports)-1]->price);
+        }
+        return $transports;
+    }
+
+    private function generateRandomTransport(int $lastPrice): Transport {
+        return new Transport(rand($lastPrice, $lastPrice+5));
+    }
+
 }
