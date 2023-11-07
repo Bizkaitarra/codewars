@@ -1,0 +1,2 @@
+We have 2 sorted transports list with data and price. First one contains the outbound transports and the second one the inbound transports.
+We have to merge both lists in a new one with the X cheapest combinations of outbound and inbound transports.
