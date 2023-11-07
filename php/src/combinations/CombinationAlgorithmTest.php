@@ -6,6 +6,8 @@ use PHPUnit\Framework\TestCase;
 
 final class CombinationAlgorithmTest extends TestCase
 {
+    const FORCE_COMBINATION_ALGORITHM_NAME = 'forceCombination';
+
     public function testForce() {
         $result = CombinationAlgorithms::forceCombination(
             [new Transport(1)],
@@ -33,13 +35,42 @@ final class CombinationAlgorithmTest extends TestCase
     }
 
 
-    public function testRandomMultiple() {
-        $result = CombinationAlgorithms::forceCombination(
-            $this->generateRandomTransports(500),
-            $this->generateRandomTransports(500),
-            2000
-        );
-        $this->assertCount(2000, $result);
+    /**
+     * @dataProvider testRandomProvider
+     */
+    public function testRandomMultiple(
+        string $algorithmName,
+        array  $inbounds,
+        array  $outbounds,
+        int    $maxResults
+    ) {
+        $result = $this->callAlgorithm($algorithmName, $inbounds, $outbounds, $maxResults);
+        $this->assertCount($maxResults, $result);
+    }
+
+    public function testRandomProvider() {
+        return [
+            [
+                self::FORCE_COMBINATION_ALGORITHM_NAME,
+                $this->generateRandomTransports(500),
+                $this->generateRandomTransports(500),
+                2000
+            ]
+        ];
+    }
+
+
+    public function callAlgorithm(
+        string $algorithmName,
+        array  $inbounds,
+        array  $outbounds,
+        int    $maxResults
+    ): array
+    {
+        return match ($algorithmName) {
+            self::FORCE_COMBINATION_ALGORITHM_NAME => CombinationAlgorithms::forceCombination($inbounds, $outbounds, $maxResults),
+            default => throw new \Exception('Invalid algorithm name')
+        };
     }
 
     private function generateRandomTransports(int $num): array {
